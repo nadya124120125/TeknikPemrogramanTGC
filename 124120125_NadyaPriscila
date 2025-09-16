@@ -1,0 +1,29 @@
+def hitung_total(harga: int, jumlah: int, diskon: float = 0) -> float:
+    """
+    Menghitung total belanja setelah diskon.
+
+    Parameters:
+    - harga (int): Harga satuan barang
+    - jumlah (int): Jumlah barang yang dibeli
+    - diskon (float): Persentase diskon (default 0)
+
+    Returns:
+    - float: Total harga setelah diskon
+    """
+    total = harga * jumlah
+    total -= total * (diskon / 100)
+    return total
+
+def main():
+    try:
+        harga = int(input("Masukkan harga barang: "))
+        jumlah = int(input("Masukkan jumlah barang: "))
+        diskon = float(input("Masukkan diskon (%): "))
+
+        total_belanja = hitung_total(harga, jumlah, diskon)
+        print("Total belanja = Rp {:,.0f}".format(total_belanja).replace(",", "."))
+    except ValueError:
+        print("Input tidak valid. Pastikan memasukkan angka yang benar.")
+
+if __name__ == "__main__":
+    main()
