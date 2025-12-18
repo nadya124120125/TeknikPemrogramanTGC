@@ -1,0 +1,78 @@
+import streamlit as st
+import numpy as np
+import matplotlib.pyplot as plt
+
+# ======================
+# DATA CONTOH SEISMIK
+# ======================
+np.random.seed(0)
+n_trace = 50
+n_time = 300
+data = np.random.randn(n_time, n_trace)
+
+# ======================
+# SIDEBAR
+# ======================
+st.sidebar.title("Kontrol Plot Seismik")
+
+# Pilihan colormap
+cmap = st.sidebar.selectbox(
+    "Pilih Colormap",
+    ["gray", "seismic", "viridis", "plasma", "inferno"]
+)
+
+# Mode scaling
+scale_mode = st.sidebar.radio(
+    "Mode Skala Amplitudo",
+    ["Auto", "Manual"]
+)
+
+# Slider vmin dan vmax (hanya dipakai jika Manual)
+vmin = st.sidebar.slider(
+    "vmin",
+    float(data.min()),
+    float(data.max()),
+    float(data.min())
+)
+
+vmax = st.sidebar.slider(
+    "vmax",
+    float(data.min()),
+    float(data.max()),
+    float(data.max())
+)
+
+# Opsi tambahan (pilih salah satu → saya pilih membalik sumbu waktu)
+flip_time = st.sidebar.checkbox("Balik sumbu waktu")
+
+# ======================
+# PLOT
+# ======================
+fig, ax = plt.subplots(figsize=(6, 8))
+
+if scale_mode == "Auto":
+    im = ax.imshow(
+        data,
+        cmap=cmap,
+        aspect="auto"
+    )
+else:
+    im = ax.imshow(
+        data,
+        cmap=cmap,
+        aspect="auto",
+        vmin=vmin,
+        vmax=vmax
+    )
+
+# Membalik sumbu waktu jika dicentang
+if flip_time:
+    ax.invert_yaxis()
+
+ax.set_xlabel("Trace")
+ax.set_ylabel("Time")
+ax.set_title("Plot Seismik")
+
+plt.colorbar(im, ax=ax, label="Amplitudo")
+
+st.pyplot(fig)
